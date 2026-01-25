@@ -1,0 +1,9 @@
+dist
+coverage
+node_modules
+*.log
+*.md
+package.json
+tsconfig.json
+vitest.config.js
+rspack.config.ts
