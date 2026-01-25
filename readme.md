@@ -1,5 +1,7 @@
 # Storyblok to 11ty
 
+[![npm version](https://badge.fury.io/js/@mattgrill%2Fstoryblok-11ty.svg)](https://www.npmjs.com/package/@mattgrill/storyblok-11ty)
+
 The package aims at helping you fetch all the storyblok content in order to use it in 11ty or in any SSG. The package is framework agnostic, hence you could use it with any framework or library. You won't be locked to 11ty and you'd be able to switch to other ssg or framework if needed.
 
 The package contains two classes:
@@ -8,10 +10,25 @@ The package contains two classes:
 
 ## Installation and Setup
 
+This package is published to both npm and GitHub Packages:
+
+**From npm (recommended):**
 ```bash
-npm install --save storyblok-11ty
+npm install @mattgrill/storyblok-11ty
 # or
-yarn add storyblok-11ty
+yarn add @mattgrill/storyblok-11ty
+```
+
+**From GitHub Packages:**
+```bash
+# Create .npmrc file in your project:
+echo "@mattgrill:registry=https://npm.pkg.github.com" >> .npmrc
+
+# Authenticate (requires GitHub PAT with read:packages scope)
+npm login --registry=https://npm.pkg.github.com --scope=@mattgrill
+
+# Install
+npm install @mattgrill/storyblok-11ty
 ```
 
 ## Version 2.0 Breaking Changes
@@ -26,18 +43,18 @@ Version 2.0 is a complete rewrite in TypeScript with several improvements:
 
 **Before (1.x):**
 ```javascript
-const StoryblokTo11ty = require('storyblok-11ty');
+const StoryblokTo11ty = require('@mattgrill/storyblok-11ty');
 const sb = new StoryblokTo11ty.importer({token: 'your-token'});
 ```
 
 **After (2.x):**
 ```javascript
 // CommonJS
-const { StoryblokTo11tyData } = require('storyblok-11ty');
+const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 const sb = new StoryblokTo11tyData({token: 'your-token'});
 
 // ESM / TypeScript
-import { StoryblokTo11tyData } from 'storyblok-11ty';
+import { StoryblokTo11tyData } from '@mattgrill/storyblok-11ty';
 const sb = new StoryblokTo11tyData({token: 'your-token'});
 ```
 
@@ -53,7 +70,7 @@ import {
   Story,
   TransformedStory,
   DatasourceEntry
-} from 'storyblok-11ty';
+} from '@mattgrill/storyblok-11ty';
 
 const config: StoryblokTo11tyConfig = {
   token: 'your-space-token',
@@ -80,7 +97,7 @@ const sb = new StoryblokTo11tyData(config);
 **TypeScript:**
 ```typescript
 // Example of Global Data File in the _data directory
-import { StoryblokTo11tyData, type StoryblokTo11tyConfig } from 'storyblok-11ty';
+import { StoryblokTo11tyData, type StoryblokTo11tyConfig } from '@mattgrill/storyblok-11ty';
 
 export default async () => {
     const config: StoryblokTo11tyConfig = {
@@ -96,7 +113,7 @@ export default async () => {
 
 **JavaScript (CommonJS):**
 ```javascript
-const { StoryblokTo11tyData } = require('storyblok-11ty');
+const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 
 module.exports = async () => {
     const sb = new StoryblokTo11tyData({token: 'your-space-token'});
@@ -135,7 +152,7 @@ Array<{
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyData, type Story } from 'storyblok-11ty';
+import { StoryblokTo11tyData, type Story } from '@mattgrill/storyblok-11ty';
 
 export default async () => {
     const sb = new StoryblokTo11tyData({token: 'your-space-token'});
@@ -147,7 +164,7 @@ export default async () => {
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyData } = require('storyblok-11ty');
+const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 
 module.exports = async () => {
     const sb = new StoryblokTo11tyData({token: 'your-space-token'});
@@ -170,7 +187,7 @@ Promise. Return `false` if something went wrong in the process, otherwise `true`
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyData } from 'storyblok-11ty';
+import { StoryblokTo11tyData } from '@mattgrill/storyblok-11ty';
 
 const sb = new StoryblokTo11tyData({
     token: 'your-space-token',
@@ -186,7 +203,7 @@ await sb.storeStories('home');
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyData } = require('storyblok-11ty');
+const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 const sb = new StoryblokTo11tyData({token: 'your-space-token'});
 
 // Store all stories
@@ -210,7 +227,7 @@ Promise. The response of the promise is an object with all the datasources or an
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyData, type DatasourceEntry } from 'storyblok-11ty';
+import { StoryblokTo11tyData, type DatasourceEntry } from '@mattgrill/storyblok-11ty';
 
 // Get all datasources
 export const allDatasources = async () => {
@@ -227,7 +244,7 @@ export const categories = async (): Promise<DatasourceEntry[]> => {
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyData } = require('storyblok-11ty');
+const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 
 // Get all datasources
 module.exports = async () => {
@@ -256,7 +273,7 @@ Promise. Return `false` if something went wrong in the process, otherwise `true`
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyData } from 'storyblok-11ty';
+import { StoryblokTo11tyData } from '@mattgrill/storyblok-11ty';
 
 const sb = new StoryblokTo11tyData({
     token: 'your-space-token',
@@ -272,7 +289,7 @@ await sb.storeDatasources('categories');
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyData } = require('storyblok-11ty');
+const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 const sb = new StoryblokTo11tyData({token: 'your-space-token'});
 
 // Store all datasources
@@ -293,7 +310,7 @@ await sb.storeDatasources('categories');
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyPlugin } from 'storyblok-11ty';
+import { StoryblokTo11tyPlugin } from '@mattgrill/storyblok-11ty';
 
 export default function(eleventyConfig) {
     const sbPlugin = new StoryblokTo11tyPlugin({blocks_folder: 'components/'});
@@ -303,7 +320,7 @@ export default function(eleventyConfig) {
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyPlugin } = require('storyblok-11ty');
+const { StoryblokTo11tyPlugin } = require('@mattgrill/storyblok-11ty');
 
 module.exports = function(eleventyConfig) {
     const sbPlugin = new StoryblokTo11tyPlugin({blocks_folder: 'components/'});
@@ -324,7 +341,7 @@ The block fields will be passed to the layout under the object `block`. If your 
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyPlugin } from "storyblok-11ty";
+import { StoryblokTo11tyPlugin } from "@mattgrill/storyblok-11ty";
 
 export default function(eleventyConfig) {
   const sbPlugin = new StoryblokTo11tyPlugin({blocks_folder: 'components/'});
@@ -334,7 +351,7 @@ export default function(eleventyConfig) {
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyPlugin } = require("storyblok-11ty");
+const { StoryblokTo11tyPlugin } = require("@mattgrill/storyblok-11ty");
 
 module.exports = function(eleventyConfig) {
   const sbPlugin = new StoryblokTo11tyPlugin({blocks_folder: 'components/'});
@@ -350,7 +367,7 @@ The block fields will be passed to the layout under the object `block`. If your 
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyPlugin } from "storyblok-11ty";
+import { StoryblokTo11tyPlugin } from "@mattgrill/storyblok-11ty";
 
 export default function(eleventyConfig) {
   const sbPlugin = new StoryblokTo11tyPlugin({blocks_folder: '_includes/components/'});
@@ -360,7 +377,7 @@ export default function(eleventyConfig) {
 
 **JavaScript:**
 ```javascript
-const { StoryblokTo11tyPlugin } = require("storyblok-11ty");
+const { StoryblokTo11tyPlugin } = require("@mattgrill/storyblok-11ty");
 
 module.exports = function(eleventyConfig) {
   const sbPlugin = new StoryblokTo11tyPlugin({blocks_folder: '_includes/components/'});
@@ -386,7 +403,7 @@ import type {
   DatasourceEntry,         // Datasource entry object
   GetStoriesParams,        // Parameters for getStories method
   ApiResponse              // API response structure
-} from 'storyblok-11ty';
+} from '@mattgrill/storyblok-11ty';
 ```
 
 ## Development

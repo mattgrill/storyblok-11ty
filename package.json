@@ -71,10 +71,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/christianzoppi/storyblok-11ty"
+    "url": "git+https://github.com/mattgrill/storyblok-11ty"
   },
+  "homepage": "https://github.com/mattgrill/storyblok-11ty#readme",
   "bugs": {
-    "url": "https://github.com/christianzoppi/storyblok-11ty/issues"
+    "url": "https://github.com/mattgrill/storyblok-11ty/issues"
   },
   "lint-staged": {
     "*.ts": [
