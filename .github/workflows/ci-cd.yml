@@ -126,13 +126,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
       
       - name: Install dependencies
         run: npm ci --include=optional
       
       - name: Build
         run: npm run build
+      
+      - name: Configure npm for provenance
+        run: |
+          echo "//registry.npmjs.org/:_authToken=" > ~/.npmrc
       
       - name: Publish to npm
         run: npm publish --provenance --access public --no-git-checks
