@@ -106,6 +106,7 @@ jobs:
     needs: version-bump
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: npm-publish
     
     permissions:
       contents: read
@@ -126,7 +127,6 @@ jobs:
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
       
       - name: Install dependencies
         run: npm ci --include=optional
@@ -136,5 +136,3 @@ jobs:
       
       - name: Publish to npm
         run: npm publish --provenance --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
