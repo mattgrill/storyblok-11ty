@@ -128,37 +128,49 @@ module.exports = async () => {
 With this method you can get all the Stories or a single one or a subset of them. The stories will be returned in a javascript object already parsed.
 
 **Parameters**
-- `[slug]` String, optional. The slug of the story or a storyblok-js-client request query, like `/stories?starts_with=blog`
-- `[options]` Object, optional. It allows to pass additional parameters to the `storyblok-js-client` `getStories` call.
+- `[params]` Object (GetStoriesParams), optional. Filter and configuration options:
+  - `component` String, optional. Filter stories by component name.
+  - `resolve_relations` String, optional. Resolve multiple levels of content by specifying comma-separated values of `component.field_name` according to your data model (e.g., `"article.author,article.categories"`).
+  - `resolve_links` String, optional. Resolve internal links. Possible values: `"url"`, `"story"`, `"link"`.
+  - `language` String, optional. Language code to fetch content in a specific language.
+  - `fallback_lang` String, optional. Fallback language code if the requested language is not available.
 
 **Return**
-Promise. The response of the promise is the data received from Storyblok. In case you are getting only one story, the structure of the object will be:
+Promise. The response of the promise is an array of `TransformedStory` objects:
 
 ```typescript
-{
-    total: 1,
-    stories: Story[]
-}
+TransformedStory[]
 ```
-Otherwise it will be:
-```typescript
-Array<{
-    total: number
-    stories: Story[]
-}>
-```
+
+Each `TransformedStory` includes the story data plus 11ty-specific fields like `layout`, `tags`, `data`, and `permalink`.
 
 **Examples**
 
 **TypeScript:**
 ```typescript
-import { StoryblokTo11tyData, type Story } from '@mattgrill/storyblok-11ty';
+import { StoryblokTo11tyData, type TransformedStory } from '@mattgrill/storyblok-11ty';
 
 export default async () => {
     const sb = new StoryblokTo11tyData({token: 'your-space-token'});
-    
-    const result = await sb.getStories();
-    return result;
+
+    // Get all stories
+    const allStories: TransformedStory[] = await sb.getStories();
+
+    // Get only stories with a specific component
+    const articles = await sb.getStories({ component: 'article' });
+
+    // Resolve relations to get linked content
+    const storiesWithRelations = await sb.getStories({
+        resolve_relations: 'article.author,article.categories'
+    });
+
+    // Get stories in a specific language with fallback
+    const germanStories = await sb.getStories({
+        language: 'de',
+        fallback_lang: 'en'
+    });
+
+    return allStories;
 }
 ```
 
@@ -168,20 +180,32 @@ const { StoryblokTo11tyData } = require('@mattgrill/storyblok-11ty');
 
 module.exports = async () => {
     const sb = new StoryblokTo11tyData({token: 'your-space-token'});
-    
+
+    // Get all stories
     return await sb.getStories();
+
+    // Or with options:
+    // return await sb.getStories({
+    //     component: 'article',
+    //     resolve_relations: 'article.author'
+    // });
 }
 ```
 
 ### Method `storeStories`
 
-Store all the stories or a subset of them. The stories will be stored as `json` files in the `_data` folder or in the one specified through the `content_path` parameter of the `StoryblokTo11tyData` instance. Each story will be stored in a file with its slug.
+Store all the stories or a subset of them as markdown files with JSON front matter. Stories are stored in the folder specified through the `stories_path` parameter (default: `storyblok/`). Each story is saved as `{uuid}.md`.
 
 **Parameters**
-- `[slug]` String, optional. The slug of the story or a storyblok-js-client request query, like `/stories?starts_with=blog`
+- `[params]` Object (GetStoriesParams), optional. Same filter options as `getStories`:
+  - `component` String, optional. Filter stories by component name.
+  - `resolve_relations` String, optional. Resolve relations before storing.
+  - `resolve_links` String, optional. Resolve internal links.
+  - `language` String, optional. Language code.
+  - `fallback_lang` String, optional. Fallback language code.
 
 **Return**
-Promise. Return `false` if something went wrong in the process, otherwise `true`.
+Promise. Returns `true` if stories were stored successfully, `false` otherwise.
 
 **Examples**
 
@@ -191,14 +215,17 @@ import { StoryblokTo11tyData } from '@mattgrill/storyblok-11ty';
 
 const sb = new StoryblokTo11tyData({
     token: 'your-space-token',
-    content_path: '_data/stories'
+    stories_path: 'content/stories'
 });
 
 // Store all stories
 await sb.storeStories();
 
-// Store only the home story
-await sb.storeStories('home');
+// Store only article components with resolved relations
+await sb.storeStories({
+    component: 'article',
+    resolve_relations: 'article.author,article.categories'
+});
 ```
 
 **JavaScript:**
@@ -209,8 +236,11 @@ const sb = new StoryblokTo11tyData({token: 'your-space-token'});
 // Store all stories
 await sb.storeStories();
 
-// Store only the home story
-await sb.storeStories('home');
+// Store only articles with resolved author relations
+await sb.storeStories({
+    component: 'article',
+    resolve_relations: 'article.author'
+});
 ```
 
 ### Method `getDatasources`
@@ -401,7 +431,7 @@ import type {
   Story,                   // Story object from Storyblok
   TransformedStory,        // Transformed story with 11ty specific fields
   DatasourceEntry,         // Datasource entry object
-  GetStoriesParams,        // Parameters for getStories method
+  GetStoriesParams,        // Parameters for getStories/storeStories (component, resolve_relations, etc.)
   ApiResponse              // API response structure
 } from '@mattgrill/storyblok-11ty';
 ```
